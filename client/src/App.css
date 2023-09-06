@@ -67,6 +67,7 @@ header {
     width: 300px;
     display: inline;
     float: left;
+    margin-bottom: 10px;
 
     height: auto; /* Maintain aspect ratio */
   }
