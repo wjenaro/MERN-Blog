@@ -2,7 +2,7 @@ const express=require('express');
 const app=express();
 const PORT=4000;
 
-app.get('/test', (req, res)=>{
+app.get('/register', (req, res)=>{
 res.send('Test is good');
 });
 
