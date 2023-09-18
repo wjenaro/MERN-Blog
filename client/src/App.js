@@ -1,47 +1,42 @@
-import './App.css';
-import { Routes, Route } from "react-router-dom";
+import React from 'react';
 import Header from './Header';
+import Footer from './Footer';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from './LoginPage';
+import Logout from './LogoutPage';
 import Post from './Post';
-import Login from './Login';
 
+/**
+ * Renders the main structure of a web page.
+ * @returns {JSX.Element} The JSX code representing the web page structure.
+ */
 function App() {
   return (
-    <Routes>
-      <Route
-        index
-        element={
-          <main>
-            <Header />
-            <Post />
-            <Post />
-          </main>
-        }
-      />
+   
+      <Routes>
+        <Route index element={
+            <main>
+                <Header />
+                <Post />
+                <Post />
+                <Footer />
+            </main>
 
-      <Route
-        path={'/login'}
-        element={
-          <div>
-            <Header />
-            <Login />
-          </div>
-        }
-      />
+        }/>
+        <Route path='/login' element={
+          <Login />
+        }/>
+        <Route path='/logout' element={
+          <Logout />
+        }/>
 
-      <Route
-        path={'/logout'}
-        element={
-          <main>
-        <Header />
-      
-          </main>
-    
-          
-          
-        }
-      />
-    </Routes>
+
+
+      </Routes>
+     
+ 
   );
 }
 
 export default App;
+

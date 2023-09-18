@@ -1,14 +1,29 @@
-import React from 'react';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 
-export default function Header() {
+/**
+ * Renders a Bootstrap Navbar component with some text and a link.
+ * @returns {JSX.Element} The rendered Navbar component.
+ */
+function Header() {
   return (
-    <header>
-      <a href="" className="logo">My Blog</a>
-      <nav>
-        <Link to="/login" className="login">Login</Link>
-        <Link to="/logout" className="logout">Logout</Link>
-      </nav>
-    </header>
+    <Navbar bg="body-tertiary">
+      <Container>
+        <Navbar.Brand href="/">Blog</Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text className='p-3'>
+    <a href="/login" className="btn p-2 btn-primary">Login</a>
+  
+  {' | '}
+  <a href='/logout' className='btn p-2 btn-danger'>Logout</a>
+</Navbar.Text>
+
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
+
+export default Header;
