@@ -1,6 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+
 
 /**
  * Renders a Bootstrap Navbar component with some text and a link.
@@ -17,7 +17,7 @@ function Header() {
     <a href="/login" className="btn p-2 btn-primary">Login</a>
   
   {' | '}
-  <a href='/logout' className='btn p-2 btn-danger'>Logout</a>
+  <a href='/resgister' className='btn p-2 btn-danger'>Register</a>
 </Navbar.Text>
 
         </Navbar.Collapse>

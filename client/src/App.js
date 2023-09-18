@@ -3,8 +3,8 @@ import Header from './Header';
 import Footer from './Footer';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './LoginPage';
-import Logout from './LogoutPage';
 import Post from './Post';
+import Register from './RegisterPage';
 
 /**
  * Renders the main structure of a web page.
@@ -26,11 +26,9 @@ function App() {
         <Route path='/login' element={
           <Login />
         }/>
-        <Route path='/logout' element={
-          <Logout />
+        <Route path='/register' element={
+          <Register />
         }/>
-
-
 
       </Routes>
      

@@ -1,6 +1,6 @@
 const express=require('express');
 const app=express();
-const PORT=4000;
+const PORT=3001;
 
 app.get('/register', (req, res)=>{
 res.send('Test is good');

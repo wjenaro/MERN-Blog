@@ -1,18 +1,19 @@
 import Footer from "./Footer";
 import Header from "./Header";
-import LogoutForm from "./LogoutForm";
+import RegisterForm from "./RegisterForm";
+
 
 /**
  * Renders the main section of a web page with a header and a footer.
  * @returns {JSX.Element} The JSX element representing the main section.
  */
-function Logout() {
+function Register() {
   return (
     <main>
       <Header />
-      <LogoutForm />
+      <RegisterForm />
       <Footer />
     </main>
   );
 }
-export default Logout;
+export default Register;
