@@ -1,10 +1,12 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import Login from './LoginPage';
 import Post from './Post';
-import Register from './RegisterPage';
+import Register from './Register';
+import {UserContextProvider} from './UserContext';
+
 
 /**
  * Renders the main structure of a web page.
@@ -12,8 +14,9 @@ import Register from './RegisterPage';
  */
 function App() {
   return (
-   
-      <Routes>
+    <UserContextProvider>
+      
+ <Routes>
         <Route index element={
             <main>
                 <Header />
@@ -26,11 +29,16 @@ function App() {
         <Route path='/login' element={
           <Login />
         }/>
-        <Route path='/register' element={
-          <Register />
+           <Route path='/register' element={
+            <Register />
         }/>
+     
 
       </Routes>
+  
+    </UserContextProvider>
+   
+     
      
  
   );
