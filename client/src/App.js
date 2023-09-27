@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import {  Routes, Route } from "react-router-dom";
@@ -6,6 +6,7 @@ import Login from './LoginPage';
 import Post from './Post';
 import Register from './Register';
 import {UserContextProvider} from './UserContext';
+import CreatePost from './pages/CreatePost';
 
 
 /**
@@ -13,6 +14,22 @@ import {UserContextProvider} from './UserContext';
  * @returns {JSX.Element} The JSX code representing the web page structure.
  */
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:4000/posts');
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <UserContextProvider>
       
@@ -20,8 +37,8 @@ function App() {
         <Route index element={
             <main>
                 <Header />
-                <Post />
-                <Post />
+                <Post posts={posts} /> {/* Pass the fetched posts to the Post component */}
+             
                 <Footer />
             </main>
 
@@ -31,6 +48,10 @@ function App() {
         }/>
            <Route path='/register' element={
             <Register />
+        }/>
+        <Route path='/create' element={
+          <CreatePost />
+
         }/>
      
 
