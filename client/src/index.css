@@ -11,3 +11,59 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.img-fluid {
+  width: 100%;
+  max-height: 300px;
+  display: block;
+  margin: 10px 0;
+}
+/* Assuming you have a class named "edit-button" */
+/* 
+    CSS class: .edit-button
+    Summary: Used to style a button element for editing purposes.
+    Features: Blue background color, white text color, rounded corners, hover effect.
+*/
+
+.edit-button {
+  display: inline-block;
+  background-color: #3498db;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.edit-button img {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.btn-edit {
+  /* Define your desired styles here */
+  background-color: #4CAF50; /* Green background color */
+  color: white; /* White text color */
+  padding: 10px 20px; /* Padding around text */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer;
+  font-size: 16px; 
+  margin-top: 50px;
+  display: block;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Add hover effect */
+.btn-edit:hover {
+  background-color: #45a049; /* Darker green on hover */
+}

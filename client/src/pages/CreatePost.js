@@ -61,6 +61,7 @@ export default function CreatePost() {
         {
             method: "POST", 
             body: formData,
+            credentials: 'include',
     
         });
         if (response.ok) {

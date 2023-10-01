@@ -7,6 +7,8 @@ import Post from './Post';
 import Register from './Register';
 import {UserContextProvider} from './UserContext';
 import CreatePost from './pages/CreatePost';
+import PostPage from './pages/PostPage';
+import EditPost from './pages/EditPost';
 
 
 /**
@@ -37,7 +39,7 @@ function App() {
         <Route index element={
             <main>
                 <Header />
-                <Post posts={posts} /> {/* Pass the fetched posts to the Post component */}
+                <Post posts={posts} /> 
              
                 <Footer />
             </main>
@@ -51,6 +53,14 @@ function App() {
         }/>
         <Route path='/create' element={
           <CreatePost />
+
+        }/>
+        <Route path='/post/:id' element={
+          <PostPage />
+
+        }/>
+        <Route path='/edit/:id' element={
+          <EditPost />
 
         }/>
      
