@@ -12,8 +12,12 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 4000; // Use environment variable for port
-const CLIENT="http://localhost:3000";
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const CLIENT = process.env.CLIENT || "http://localhost:3000";
+
+
 app.use(cors({
   origin: CLIENT,
   method:["POST","GET"],
@@ -21,15 +25,16 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-const dbName="Animals";
+const dbName=process.env.DB_NAME || "Animals";
 
 // Load environment variables from .env file
-//require('dotenv').config();
-const SERVER_URL=`mongodb+srv://animalblog:snt5jMT0adajGAZJ@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-//const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+require('dotenv').config();
+
+const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 
-const secret = process.env.JWT_SECRET || 'osnjwojedininff/sds'; // Use environment variable for secret
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
+
 
  mongoose.connect(SERVER_URL, {
   useNewUrlParser: true,
@@ -68,7 +73,9 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Username or password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h' });
+    //const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h' });
+    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -97,6 +104,7 @@ app.get('/profile', (req, res) => {
     res.json(decoded);
   });
 });
+
 
 const uploadMiddleware = multer({ dest: 'uploads/' });
 
