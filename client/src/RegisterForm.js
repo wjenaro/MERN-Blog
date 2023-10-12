@@ -17,7 +17,7 @@ function RegisterForm() {
   async function register(ev) {
     ev.preventDefault();
     try {
-      const response = await fetch("http://127.0.0.1:4000/register", {
+      const response = await fetch("https://mern-blog-api-five.vercel.app/register", {
         method: "POST",
         body: JSON.stringify({ username, email, password }),
         headers: { "Content-Type": "application/json" },
