@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 4000; // Use environment variable for port
+const PORT = process.env.PORT || 4000; // Use environment variable for port
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
