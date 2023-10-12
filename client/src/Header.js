@@ -14,7 +14,7 @@ function Header() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:4000/profile', {
+        const response = await fetch('https://mern-blog-97ybn8snm-jenaros-projects.vercel.app/profile', {
           credentials: 'include'
         });
         const userData = await response.json(); // Use userData instead of userInfo
@@ -28,7 +28,7 @@ function Header() {
   }, [setUserInfo]); // Add setUserInfo as a dependency
 
   function logout() {
-    fetch('http://localhost:4000/logout', {
+    fetch('https://mern-blog-97ybn8snm-jenaros-projects.vercel.app/logout', {
       credentials: 'include',
       method: 'POST'
     })
