@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:4000/posts');
+        const response = await fetch('https://mern-blog-api-five.vercel.app/posts');
         const data = await response.json();
         setPosts(data);
       } catch (error) {

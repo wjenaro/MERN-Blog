@@ -57,7 +57,7 @@ export default function CreatePost() {
     event.preventDefault();
 
     try {
-        const response= await fetch('http://localhost:4000/cpost',
+        const response= await fetch('https://mern-blog-api-five.vercel.app/cpost',
         {
             method: "POST", 
             body: formData,

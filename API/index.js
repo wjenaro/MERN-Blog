@@ -11,11 +11,12 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 4000; // Use environment variable for port
+const PORT = process.env.PORT || 4000; // Use environment variable for port
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['https://mern-blog-client-rho.vercel.app/'],
+  method:["POST","GET"],
   credentials: true,
 }));
 app.use(express.json());
@@ -23,9 +24,9 @@ app.use(cookieParser());
 const dbName="Animals";
 
 // Load environment variables from .env file
-require('dotenv').config();
-//const SERVER_URL=`mongodb+srv://animalblog:snt5jMT0adajGAZJ@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+//require('dotenv').config();
+const SERVER_URL=`mongodb+srv://animalblog:snt5jMT0adajGAZJ@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+//const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 
 const secret = process.env.JWT_SECRET || 'osnjwojedininff/sds'; // Use environment variable for secret
