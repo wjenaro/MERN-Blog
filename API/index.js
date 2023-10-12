@@ -20,16 +20,21 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+const dbName="Animals";
 
-const dbName = 'Users';
+// Load environment variables from .env file
+require('dotenv').config();
+//const SERVER_URL=`mongodb+srv://animalblog:snt5jMT0adajGAZJ@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+
+
 const secret = process.env.JWT_SECRET || 'osnjwojedininff/sds'; // Use environment variable for secret
 
-mongoose.connect('mongodb://0.0.0.0:27017/blogMern', {
+ mongoose.connect(SERVER_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-})
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+});
+
 
 app.post('/register', async (req, res) => {
   try {
