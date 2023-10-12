@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 4000; // Use environment variable for port
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const CLIENT = process.env.CLIENT || "http://localhost:3000";
+const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 
 
 app.use(cors({
