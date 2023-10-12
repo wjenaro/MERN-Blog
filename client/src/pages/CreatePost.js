@@ -17,7 +17,7 @@ export default function CreatePost() {
   const [content, setContent] = useState('');
   const [imageFile, setImageFile] = useState('');
   const [redirect, setRedirect]=useState(false);
-  const serverUrl = 'https://mern-blog-api-three.vercel.app/';
+  const serverUrl = 'https://mern-blog-api-three.vercel.app';
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],

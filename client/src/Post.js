@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
  * @returns {JSX.Element} - Rendered JSX code representing a container with rows and columns for each post.
  */
 function ContainerExample({ posts }) {
-  const serverUrl = 'http://localhost:4000';
+  const serverUrl = 'https://mern-blog-97ybn8snm-jenaros-projects.vercel.app';
 
   /**
    * Truncates the content if it exceeds the maximum length.

@@ -13,7 +13,7 @@ function BasicLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect]=useState(false);
-  const serverUrl = 'http://localhost:4000';
+  const serverUrl = 'https://mern-blog-api-three.vercel.app';
 
   /**
    * Handles the form submission and sends a POST request to the login endpoint.

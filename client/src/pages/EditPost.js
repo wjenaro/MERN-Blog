@@ -11,7 +11,7 @@ import { Navigate, useParams } from 'react-router-dom';
  * @returns {JSX.Element} The JSX element representing the "Edit" heading.
  */
 export default function EditPost() {
-  const serverUrl = 'https://mern-blog-api-three.vercel.app/';
+  const serverUrl = 'https://mern-blog-api-three.vercel.app';
         const {id} = useParams();
         const [title,setTitle] = useState('');
         
