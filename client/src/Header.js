@@ -10,11 +10,11 @@ import { UserContext } from './UserContext';
  */
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext); // Use useContext instead of UserContext
-
+const serverUrl="https://mern-blog-97ybn8snm-jenaros-projects.vercel.app"
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('https://mern-blog-97ybn8snm-jenaros-projects.vercel.app/profile', {
+        const response = await fetch(`${serverUrl}/profile`, {
           credentials: 'include'
         });
         const userData = await response.json(); // Use userData instead of userInfo
@@ -28,7 +28,7 @@ function Header() {
   }, [setUserInfo]); // Add setUserInfo as a dependency
 
   function logout() {
-    fetch('https://mern-blog-97ybn8snm-jenaros-projects.vercel.app/logout', {
+    fetch(`${serverUrl}/logout`, {
       credentials: 'include',
       method: 'POST'
     })

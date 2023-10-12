@@ -18,13 +18,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 
 
-app.use(cors({
-  origin: CLIENT,
-  method:["POST","GET"],
-  credentials: true,
-}));
-app.use(express.json());
-app.use(cookieParser());
+
 const dbName=process.env.DB_NAME || "Animals";
 
 // Load environment variables from .env file
@@ -41,6 +35,13 @@ const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a
   useUnifiedTopology: true,
 });
 
+app.use(cors({
+  origin: CLIENT,
+  method: ["POST", "GET"],
+  credentials: true,
+}));
+app.use(express.json());
+app.use(cookieParser());
 
 app.post('/register', async (req, res) => {
   try {
@@ -69,17 +70,21 @@ app.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ username });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Username or password is incorrect' });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
     }
 
-    //const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h' });
-    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Password is incorrect' });
+    }
+
+    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
       sameSite: 'strict',
     }).json({ id: user._id, username });
   } catch (error) {
@@ -87,6 +92,7 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 });
+
 
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
