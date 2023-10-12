@@ -13,6 +13,7 @@ function BasicLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect]=useState(false);
+  const serverUrl = 'http://localhost:4000';
 
   /**
    * Handles the form submission and sends a POST request to the login endpoint.
@@ -21,7 +22,7 @@ function BasicLogin() {
   async function login(ev) {
     ev.preventDefault();
     try {
-      const response = await fetch('https://mern-blog-api-five.vercel.app/login', {
+      const response = await fetch(`${serverUrl}/login`, {
         method: 'POST',
         body: JSON.stringify({ username, password }),
         headers: { 'Content-Type': 'application/json' },

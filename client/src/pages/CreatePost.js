@@ -17,7 +17,7 @@ export default function CreatePost() {
   const [content, setContent] = useState('');
   const [imageFile, setImageFile] = useState('');
   const [redirect, setRedirect]=useState(false);
-
+  const serverUrl = 'http://localhost:4000';
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],
@@ -57,7 +57,7 @@ export default function CreatePost() {
     event.preventDefault();
 
     try {
-        const response= await fetch('https://mern-blog-api-five.vercel.app/cpost',
+        const response= await fetch(`${serverUrl}/cpost`,
         {
             method: "POST", 
             body: formData,

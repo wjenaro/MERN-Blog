@@ -11,7 +11,7 @@ import { Navigate, useParams } from 'react-router-dom';
  * @returns {JSX.Element} The JSX element representing the "Edit" heading.
  */
 export default function EditPost() {
-
+  const serverUrl = 'http://localhost:4000';
         const {id} = useParams();
         const [title,setTitle] = useState('');
         
@@ -20,7 +20,7 @@ export default function EditPost() {
         const [redirect,setRedirect] = useState(false);
       
         useEffect(() => {
-          fetch('https://mern-blog-api-five.vercel.app/'+id)
+          fetch(`${serverUrl}/`+id)
             .then(response => {
               response.json().then(postInfo => {
                 setTitle(postInfo.title);
@@ -40,7 +40,7 @@ export default function EditPost() {
           if (files?.[0]) {
             data.set('file', files?.[0]);
           }
-          const response = await fetch('http://localhost:4000/post', {
+          const response = await fetch(`${serverUrl}/post`, {
             method: 'PUT',
             body: data,
             credentials: 'include',

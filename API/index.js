@@ -12,10 +12,10 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 4000; // Use environment variable for port
-
+const CLIENT="http://localhost:3000";
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
-  origin: ['https://mern-blog-client-rho.vercel.app/'],
+  origin: CLIENT,
   method:["POST","GET"],
   credentials: true,
 }));

@@ -9,7 +9,7 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-
+  const serverUrl = 'http://localhost:4000';
   /**
    * Handles form submission.
    * @param {Event} ev - The form submission event.
@@ -17,7 +17,7 @@ function RegisterForm() {
   async function register(ev) {
     ev.preventDefault();
     try {
-      const response = await fetch("https://mern-blog-api-five.vercel.app/register", {
+      const response = await fetch(`${serverUrl}/register`, {
         method: "POST",
         body: JSON.stringify({ username, email, password }),
         headers: { "Content-Type": "application/json" },

@@ -17,11 +17,11 @@ import EditPost from './pages/EditPost';
  */
 function App() {
   const [posts, setPosts] = useState([]);
-
+  const serverUrl = 'http://localhost:4000';
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://mern-blog-api-five.vercel.app/posts');
+        const response = await fetch(`${serverUrl}/posts`);
         const data = await response.json();
         setPosts(data);
       } catch (error) {

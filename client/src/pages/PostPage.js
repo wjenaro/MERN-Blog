@@ -12,11 +12,12 @@ export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
+  const serverUrl = 'http://localhost:4000';
   const url_ = 'http://localhost:3000';
-  const serverUrl="https://mern-blog-api-five.vercel.app";
+  
 
   useEffect(() => {
-    fetch(`https://mern-blog-api-five.vercel.app/post/${id}`)
+    fetch(`${serverUrl}/post/${id}`)
       .then(response => {
         response.json().then(postInfo => {
           setPostInfo(postInfo);
