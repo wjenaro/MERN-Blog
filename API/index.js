@@ -15,7 +15,7 @@ const PORT = 4000; // Use environment variable for port
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
-  origin: ['https://deploy-mern-lwhq.vercel.app'],
+  origin: ['https://mern-blog-client-rho.vercel.app/'],
   method:["POST","GET"],
   credentials: true,
 }));
