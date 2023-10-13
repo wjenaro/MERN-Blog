@@ -43,7 +43,7 @@ app.use(cors({
 app.use(express.json());
 
 
- 
+ //fetch data to populate the homepage  
  app.get('/posts', async (req, res) => {
   try {
     const posts = await Post.find()
@@ -56,7 +56,28 @@ app.use(express.json());
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+//register
+const bcrypt = require('bcrypt');
+app.post('/register', async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
 
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while registering the user' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
