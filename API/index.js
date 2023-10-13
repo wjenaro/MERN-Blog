@@ -112,6 +112,23 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 });
+//profile 
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.error(err);
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    res.json(decoded);
+  });
+});
 
 
 app.listen(PORT, () => {

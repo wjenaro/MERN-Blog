@@ -10,7 +10,8 @@ import { UserContext } from './UserContext';
  */
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext); // Use useContext instead of UserContext
-const serverUrl="https://mern-blog-97ybn8snm-jenaros-projects.vercel.app"
+  const serverUrl = 'https://mern-blog-hazel.vercel.app';
+
   useEffect(() => {
     async function fetchData() {
       try {
