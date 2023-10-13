@@ -1,5 +1,6 @@
 const express = require('express');
 const Post=require("./models/Post");
+const cors = require('cors');
 
 //const Post = require('./models/Post');
 
@@ -32,11 +33,24 @@ db.on('error', (error) => {
 });
 
 
+const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
+app.use(cors({
+  origin: CLIENT,
+  method: ["POST", "GET", "PUT"],
+  credentials: true,
+}));
+app.use(express.json());
+
+
  // Increase the timeout (adjust as needed)
 app.get('/posts', async (req, res) => {
  try {
+
+
+
   const posts = await Post.find(); 
-  res.send(posts);
+  res.json(posts);
+ 
 } catch (error) {
 console.error('Error fetching posts:', error);
  res.status(500).send('Internal Server Error');
