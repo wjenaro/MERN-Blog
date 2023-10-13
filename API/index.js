@@ -1,5 +1,6 @@
 const express = require('express');
 const Post=require("./models/Post");
+const User=require("./models/User");
 const cors = require('cors');
 
 //const Post = require('./models/Post');
@@ -42,20 +43,18 @@ app.use(cors({
 app.use(express.json());
 
 
- // Increase the timeout (adjust as needed)
-app.get('/posts', async (req, res) => {
- try {
-
-
-
-  const posts = await Post.find(); 
-  res.json(posts);
  
-} catch (error) {
-console.error('Error fetching posts:', error);
- res.status(500).send('Internal Server Error');
- }
-
+ app.get('/posts', async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate('author', 'username')
+      .sort({ createdAt: -1 })
+      .limit(5);
+    res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
