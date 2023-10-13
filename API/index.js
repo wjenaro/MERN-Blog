@@ -122,7 +122,7 @@ app.get('/profile', (req, res) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Unauthorized : not found' });
   }
 
   jwt.verify(token, secret, (err, decoded) => {
