@@ -21,11 +21,14 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
+    process.exit(1); // Terminate the application if MongoDB connection fails
   });
 
+
+// Increase the timeout (adjust as needed)
 app.get('/', async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().timeout(5000); // Adjust timeout as needed
     res.send(posts);
   } catch (error) {
     console.error('Error fetching posts:', error);
