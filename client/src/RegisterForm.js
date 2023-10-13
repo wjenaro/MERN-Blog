@@ -10,7 +10,7 @@ function RegisterForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   
-  const serverUrl = 'https://mern-blog-api-three.vercel.app';
+  const serverUrl = 'https://mern-blog-hazel.vercel.app';
   /**
    * Handles form submission.
    * @param {Event} ev - The form submission event.
