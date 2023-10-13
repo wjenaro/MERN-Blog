@@ -15,7 +15,7 @@ const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  // Remove useFindAndModify and useCreateIndex options
+  
 });
 
 // Get the default connection
@@ -33,7 +33,7 @@ db.on('error', (error) => {
 
 
  // Increase the timeout (adjust as needed)
-app.get('/', async (req, res) => {
+app.get('/posts', async (req, res) => {
  try {
   const posts = await Post.find(); 
   res.send(posts);
