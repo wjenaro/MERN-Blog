@@ -82,6 +82,7 @@ app.post('/register', async (req, res) => {
 const jwt = require('jsonwebtoken');
 const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
 const cookieParser = require('cookie-parser');
+
 app.use(cookieParser());
 
 app.post('/login', async (req, res) => {
@@ -116,8 +117,139 @@ app.post('/login', async (req, res) => {
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
   
-res.send(token);
-  
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.error(err);
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    res.json(decoded);
+  });
+});
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const uploadMiddleware = multer({ dest: '/tmp/' });
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('token').json('ok');
+});
+app.post('/cpost', uploadMiddleware.single('imageFile'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const { originalname, path } = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    const newPath = path + '.' + ext;
+
+    const { title, content } = req.body;
+    fs.renameSync(path, newPath);
+
+    const { token } = req.cookies;
+    jwt.verify(token, secret, async (err, decoded) => {
+      if (err) {
+        console.error(err);
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      try {
+        const newPostData = await Post.create({
+          title,
+          content,
+          imageFile: newPath,
+          author: decoded.id,
+        });
+
+        res.json(newPostData);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error creating a new post' });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/posts', async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate('author', 'username')
+      .sort({ createdAt: -1 })
+      .limit(5);
+    res.json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/post/:id', async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await Post.findById(id).populate('author', ['username']);
+  res.json(postDoc);
+});
+
+app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
+  try {
+    let newPath = null;
+
+    if (req.file) {
+      const { originalname, path } = req.file;
+      const parts = originalname.split('.');
+      const ext = parts[parts.length - 1];
+      newPath = path + '.' + ext;
+      fs.renameSync(path, newPath);
+    }
+
+    const { token } = req.cookies;
+
+    jwt.verify(token, secret, {}, async (err, info) => {
+      if (err) {
+        throw err;
+      }
+
+      const { id, title, content } = req.body;
+      const postDoc = await Post.findById(id);
+
+      if (!postDoc) {
+        return res.status(404).json('Post not found');
+      }
+
+      const isAuthor = postDoc.author.toString() === info.id;
+
+      if (!isAuthor) {
+        return res.status(400).json('You are not the author');
+      }
+
+      await Post.updateOne(
+        { _id: id },
+        {
+          $set: {
+            title,
+            content,
+            cover: newPath ? newPath : postDoc.cover,
+          },
+        }
+      );
+
+      // Fetch the updated post
+      const updatedPost = await Post.findById(id);
+
+      res.json(updatedPost);
+    });
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).json('Internal Server Error');
+  }
 });
 
 
