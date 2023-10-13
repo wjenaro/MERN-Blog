@@ -113,11 +113,8 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      //secure: process.env.NODE_ENV === 'production', // Check if NODE_ENV is 'production'
-      sameSite: 'strict',
-    }).json({ id: user._id, username });
+    res.cookie('token', token).json({ id: user._id, username });
+
     
   } catch (error) {
     console.error(error);
