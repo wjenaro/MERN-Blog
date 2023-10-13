@@ -12,8 +12,9 @@ export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
-  const serverUrl = 'https://mern-blog-api-three.vercel.app';
-  const url_ = 'http://localhost:3000';
+  const serverUrl = 'https://mern-blog-hazel.vercel.app';
+ 
+  const url_ = 'https://mern-blog-client-sigma.vercel.app';
   
 
   useEffect(() => {
