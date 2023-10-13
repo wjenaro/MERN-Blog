@@ -120,7 +120,7 @@ app.post('/login', async (req, res) => {
 //profile 
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
-  
+
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
@@ -131,9 +131,17 @@ app.get('/profile', (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    // Set the token in a cookie with 'sameSite: none' and 'secure: true'
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Set to true if in production
+      sameSite: 'none',
+    });
+
     res.json(decoded);
   });
 });
+
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
