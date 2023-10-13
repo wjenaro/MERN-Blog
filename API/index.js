@@ -11,24 +11,23 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 4000; // Use environment variable for port
+const PORT = process.env.PORT || 4000;
 
+// Serve uploaded files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
-
 
 require('dotenv').config();
 
 const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 const dbName = process.env.DB_NAME || "Animals";
 const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d`;
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
 
 mongoose.connect(SERVER_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
 const db = mongoose.connection;
 
 db.on('error', (error) => {
@@ -39,7 +38,6 @@ db.once('open', () => {
   console.log('Connected to MongoDB Atlas');
 });
 
-
 app.use(cors({
   origin: CLIENT,
   method: ["POST", "GET", "PUT"],
@@ -48,13 +46,11 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   // Handle the error, or log, or throw as appropriate
 });
-
 
 app.post('/register', async (req, res) => {
   try {
@@ -97,7 +93,7 @@ app.post('/login', async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Use secure cookie in production
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     }).json({ id: user._id, username });
   } catch (error) {
@@ -105,7 +101,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 });
-
 
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
@@ -124,8 +119,7 @@ app.get('/profile', (req, res) => {
   });
 });
 
-
-const uploadMiddleware =  multer({ dest: '/tmp/' });//multer({ dest: 'uploads/' });
+const uploadMiddleware = multer({ dest: '/tmp/' });
 
 app.post('/logout', (req, res) => {
   res.clearCookie('token').json('ok');
@@ -186,44 +180,43 @@ app.get('/posts', async (req, res) => {
 });
 
 app.get('/post/:id', async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const postDoc = await Post.findById(id).populate('author', ['username']);
   res.json(postDoc);
-})
-
+});
 
 app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
-  let newPath = null;
+  try {
+    let newPath = null;
 
-  if (req.file) {
-    const { originalname, path } = req.file;
-    const parts = originalname.split('.');
-    const ext = parts[parts.length - 1];
-    newPath = path + '.' + ext;
-    fs.renameSync(path, newPath);
-  }
-
-  const { token } = req.cookies;
-
-  jwt.verify(token, secret, {}, async (err, info) => {
-    if (err) {
-      throw err; // Handle this error more gracefully in production
+    if (req.file) {
+      const { originalname, path } = req.file;
+      const parts = originalname.split('.');
+      const ext = parts[parts.length - 1];
+      newPath = path + '.' + ext;
+      fs.renameSync(path, newPath);
     }
 
-    const { id, title, content } = req.body;
-    const postDoc = await Post.findById(id);
+    const { token } = req.cookies;
 
-    if (!postDoc) {
-      return res.status(404).json('Post not found');
-    }
+    jwt.verify(token, secret, {}, async (err, info) => {
+      if (err) {
+        throw err;
+      }
 
-    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+      const { id, title, content } = req.body;
+      const postDoc = await Post.findById(id);
 
-    if (!isAuthor) {
-      return res.status(400).json('You are not the author');
-    }
+      if (!postDoc) {
+        return res.status(404).json('Post not found');
+      }
 
-    try {
+      const isAuthor = postDoc.author.toString() === info.id;
+
+      if (!isAuthor) {
+        return res.status(400).json('You are not the author');
+      }
+
       await Post.updateOne(
         { _id: id },
         {
@@ -239,18 +232,18 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
       const updatedPost = await Post.findById(id);
 
       res.json(updatedPost);
-    } catch (updateError) {
-      console.error('Error updating post:', updateError);
-      res.status(500).json('Internal Server Error');
-    }
-  });
+    });
+  } catch (error) {
+    console.error('Error updating post:', error);
+    res.status(500).json('Internal Server Error');
+  }
 });
 
+// Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
