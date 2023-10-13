@@ -1,40 +1,37 @@
 const express = require('express');
-const Post=require("./models/Post");
-const User=require("./models/User");
+const Post = require("./models/Post");
+const User = require("./models/User");
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 const cookieParser = require('cookie-parser');
-//const Post = require('./models/Post');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 require('dotenv').config();
+
 // Test database connection
-const mongoose = require('mongoose');
 const dbName = process.env.DB_NAME || 'Animals';
 const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
-// Connect to MongoDB using Mongoose
+
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  
 });
 
-// Get the default connection
 const db = mongoose.connection;
-
-// Event handling for successful connection
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
-
-// Event handling for connection errors
 db.on('error', (error) => {
   console.error('MongoDB connection error:', error);
 });
-
 
 const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 app.use(cors({
@@ -42,7 +39,20 @@ app.use(cors({
   methods: ["POST", "GET", "PUT"],
   credentials: true,
 }));
+
+// Middleware for setting security headers
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+
 app.use(express.json());
+app.use(cookieParser());
+
+
+
 
 
  //fetch data to populate the homepage  
@@ -59,7 +69,7 @@ app.use(express.json());
   }
 });
 //register
-const bcrypt = require('bcrypt');
+
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -83,7 +93,7 @@ app.post('/register', async (req, res) => {
 ///Login
 
 
-app.use(cookieParser());
+
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -122,7 +132,7 @@ app.get('/profile', (req, res) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.status(401).json({ error: 'Unauthorized : not found' });
+    return res.status(401).json({ error: 'Unauthorized: not found' });
   }
 
   jwt.verify(token, secret, (err, decoded) => {
@@ -131,22 +141,18 @@ app.get('/profile', (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Set the token in a cookie with 'sameSite: none' and 'secure: true'
     res.cookie('token', token, {
       httpOnly: true,
       secure: true, // Set to true in production
       sameSite: 'none',
     });
-    
-    
 
     res.json(decoded);
   });
 });
 
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+
+
 const uploadMiddleware = multer({ dest: '/tmp/' });
 
 app.post('/logout', (req, res) => {
