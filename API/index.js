@@ -15,23 +15,17 @@ const PORT = process.env.PORT || 4000; // Use environment variable for port
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 
 
 
-const dbName=process.env.DB_NAME || "Animals";
-
-// Load environment variables from .env file
 require('dotenv').config();
 
+const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
+const dbName = process.env.DB_NAME || "Animals";
 const SERVER_URL = `mongodb+srv://animalblog:${process.env.DB_PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d`;
 
-
-const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
-
-
-
- mongoose.connect(SERVER_URL, {
+mongoose.connect(SERVER_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
