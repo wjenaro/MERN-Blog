@@ -115,19 +115,9 @@ app.post('/login', async (req, res) => {
 //profile 
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
-
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      console.error(err);
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    res.json(decoded);
-  });
+  
+res.send(token);
+  
 });
 
 
