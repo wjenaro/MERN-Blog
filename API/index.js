@@ -7,7 +7,7 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
+require('dotenv').config();
 // Test database connection
 const mongoose = require('mongoose');
 const dbName = process.env.DB_NAME || 'Animals';
@@ -108,10 +108,14 @@ app.post('/login', async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     }).json({ id: user._id, username });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
+
+
+  
 });
 //profile 
 app.get('/profile', (req, res) => {
@@ -250,6 +254,17 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
     console.error('Error updating post:', error);
     res.status(500).json('Internal Server Error');
   }
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Handle the error, or log, or throw as appropriate
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
 
