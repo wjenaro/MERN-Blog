@@ -115,7 +115,7 @@ app.post('/login', async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Check if NODE_ENV is 'production'
+      //secure: process.env.NODE_ENV === 'production', // Check if NODE_ENV is 'production'
       sameSite: 'strict',
     }).json({ id: user._id, username });
     
