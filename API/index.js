@@ -48,6 +48,14 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Handle the error, or log, or throw as appropriate
+});
+
+
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
