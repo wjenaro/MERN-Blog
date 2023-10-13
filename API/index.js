@@ -2,7 +2,9 @@ const express = require('express');
 const Post=require("./models/Post");
 const User=require("./models/User");
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
+const cookieParser = require('cookie-parser');
 //const Post = require('./models/Post');
 
 const app = express();
@@ -12,7 +14,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const dbName = process.env.DB_NAME || 'Animals';
 const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
 // Connect to MongoDB using Mongoose
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -37,7 +39,7 @@ db.on('error', (error) => {
 const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
 app.use(cors({
   origin: CLIENT,
-  method: ["POST", "GET", "PUT"],
+  methods: ["POST", "GET", "PUT"],
   credentials: true,
 }));
 app.use(express.json());
@@ -79,9 +81,7 @@ app.post('/register', async (req, res) => {
   }
 });
 ///Login
-const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
-const cookieParser = require('cookie-parser');
+
 
 app.use(cookieParser());
 
@@ -105,7 +105,7 @@ app.post('/login', async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === true,
       sameSite: 'strict',
     }).json({ id: user._id, username });
     
@@ -134,9 +134,11 @@ app.get('/profile', (req, res) => {
     // Set the token in a cookie with 'sameSite: none' and 'secure: true'
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Set to true if in production
+      secure: true, // Set to true in production
       sameSite: 'none',
     });
+    
+    
 
     res.json(decoded);
   });
