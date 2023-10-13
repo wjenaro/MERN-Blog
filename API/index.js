@@ -1,39 +1,47 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const Post = require('./models/Post');
+const Post=require("./models/Post");
+
+//const Post = require('./models/Post');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Test database connection
-const DB_PASSWORD = process.env.DB_PASSWORD || "snt5jMT0adajGAZJ";
-const DB_NAME = process.env.DB_NAME || "Animals";
-const USERNAME = process.env.USERNAME || "animalblog";
-const CLUSTER_NAME = process.env.CLUSTER_NAME || "cluster0"; // Replace with your actual cluster name
-const DB_URL = `mongodb+srv://${USERNAME}:${DB_PASSWORD}@${CLUSTER_NAME}.mongodb.net/${DB_NAME}`;
+const mongoose = require('mongoose');
+const dbName = process.env.DB_NAME || 'Animals';
+const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB successfully');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-    process.exit(1); // Terminate the application if MongoDB connection fails
-  });
+// Connect to MongoDB using Mongoose
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // Remove useFindAndModify and useCreateIndex options
+});
+
+// Get the default connection
+const db = mongoose.connection;
+
+// Event handling for successful connection
+db.once('open', () => {
+  console.log('Connected to MongoDB');
+});
+
+// Event handling for connection errors
+db.on('error', (error) => {
+  console.error('MongoDB connection error:', error);
+});
 
 
-// Increase the timeout (adjust as needed)
+ // Increase the timeout (adjust as needed)
 app.get('/', async (req, res) => {
-  try {
-    const posts = await Post.find().timeout(5000); // Adjust timeout as needed
-    res.send(posts);
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    res.status(500).send('Internal Server Error');
-  }
+ try {
+  const posts = await Post.find(); 
+  res.send(posts);
+} catch (error) {
+console.error('Error fetching posts:', error);
+ res.status(500).send('Internal Server Error');
+ }
+
 });
 
 
