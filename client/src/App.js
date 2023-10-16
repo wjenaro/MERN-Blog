@@ -17,8 +17,8 @@ import EditPost from './pages/EditPost';
  */
 function App() {
   const [posts, setPosts] = useState([]);
-  //const serverUrl = 'https://mern-blog-hazel.vercel.app';
-  const serverUrl = process.env.SERVER_URL;
+
+  const serverUrl =  'https://mern-blog-api-hazel.vercel.app';
   useEffect(() => {
     const fetchData = async () => {
       try {
