@@ -112,7 +112,7 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
 
     res.cookie('token', token).json({ id: user._id, username });
-    res.send("Try");
+    
 
     
   } catch (error) {
@@ -120,7 +120,7 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 
-
+res.send('Try');
   
 });
 
