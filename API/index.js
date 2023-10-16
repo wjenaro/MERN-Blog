@@ -109,7 +109,8 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    const token = await jwt.sign({ username, id: userId }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    console.log(token);
 
     res.cookie('token', token).json({ id: user._id, username });
 
