@@ -119,11 +119,12 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 
-app.get("/", (req, res)=>{
-  res.send(" Working");
+
   
 });
-  
+
+app.get("/", (req, res)=>{
+  res.send("Working");
 });
 //profile 
 app.get('/profile', (req, res) => {
