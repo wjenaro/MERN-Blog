@@ -90,10 +90,6 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while registering the user' });
   }
 });
-///Login
-
-
-
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
