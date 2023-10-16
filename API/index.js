@@ -91,31 +91,32 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
   try {
-    const userDoc = await User.findOne({ username });
+    const user = await User.findOne({ username });
 
-    if (!userDoc) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
     }
 
-    const passOk = bcrypt.compareSync(password, userDoc.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!passOk) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    jwt.sign({ username, id: userDoc._id }, secret, {}, (err, token) => {
-      if (err) throw err;
-      res.cookie('token', token).json({
-        id: userDoc._id,
-        username,
-      });
-    });
+    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    
+
+    // Set secure and HttpOnly flags for cookie
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === "production", expiresIn: 3600000 }).json({ id: user._id, username });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 });
+
 
 app.get('/', (req, res) => {
   res.send('Working');
