@@ -12,7 +12,8 @@ export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
-  const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  //const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
  
   const url_ = 'https://mern-blog-client-sigma.vercel.app';
   

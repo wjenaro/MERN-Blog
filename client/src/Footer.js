@@ -14,7 +14,7 @@ function Footer() {
             <use xlinkHref="#bootstrap"></use>
           </svg>
         </a>
-        <span className="mb-3 mb-md-0 text-muted">© 2022 Company, Inc</span>
+        <span className="mb-3 mb-md-0 text-muted">© {}Company, Inc</span>
       </div>
 
       {/* Social media links */}

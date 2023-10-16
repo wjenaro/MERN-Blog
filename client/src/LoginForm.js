@@ -14,7 +14,8 @@ function BasicLogin() {
   const [password, setPassword] = useState('');
   const [redirect, setRedirect]=useState(false);
   
-  const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  //const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
 
   /**
    * Handles the form submission and sends a POST request to the login endpoint.
