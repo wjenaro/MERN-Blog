@@ -65,7 +65,7 @@ export default function PostPage() {
         <Row>
           <Col>
           <img
-              src={`${serverUrl}/${postInfo.imageFile}`}
+              src={`https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API/${postInfo.imageFile}`}
               alt='Parakeets on a Branch'
               fluid
               className="img-fluid"  
