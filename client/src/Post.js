@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
  */
 function ContainerExample({ posts }) {
   const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
-
+const IMAGEGIT="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
   /**
    * Truncates the content if it exceeds the maximum length.
    *
@@ -38,7 +38,7 @@ function ContainerExample({ posts }) {
             <Col xs lg="3">
               <Link to={`/post/${post._id}`}>
               <img
-                src={`${serverUrl}/${post.imageFile}`}
+                src={`${IMAGEGIT}/${post.imageFile}`}
                 className='post-image'
                 alt='Good picture'
                 style={{
