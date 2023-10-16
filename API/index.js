@@ -112,8 +112,9 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
 
     // Set secure and HttpOnly flags for cookie
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict', expiresIn: 3600000 }).json({ id: user._id, username });
-
+    //res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict', expiresIn: 3600000 }).json({ id: user._id, username });
+    res.cookie('username', username);
+    res.cookie('password', password);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the login' });
