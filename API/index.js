@@ -17,8 +17,8 @@ require('dotenv').config();
 
 // Test database connection
 const dbName = process.env.DB_NAME || 'Animals';
-const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
+const uri = `mongodb+srv://animalblog:rti7eWc2hWrVPufP@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const secret = process.env.JWT_SECRET || '70a9d0  f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
