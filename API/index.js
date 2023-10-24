@@ -91,9 +91,11 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  
 
   try {
     const user = await User.findOne({ username });
+    console.log(user);
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
