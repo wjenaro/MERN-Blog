@@ -147,7 +147,7 @@ app.get('/profile', (req, res) => {
   });
 });
 
-const uploadMiddleware = multer({ dest: '/uploads' });
+const uploadMiddleware = multer({ dest: '/uploads/' });
 
 app.post('/logout', (req, res) => {
   res.clearCookie('token').json('ok');
