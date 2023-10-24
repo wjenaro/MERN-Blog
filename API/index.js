@@ -12,6 +12,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 4000;
 require('dotenv').config();
 
@@ -111,7 +112,8 @@ app.post('/login', async (req, res) => {
     
 
     // Set secure and HttpOnly flags for cookie
-    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === "production", expiresIn: 3600000 }).json({ id: user._id, username });
+    res.json(token);
+    //res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === "production", expiresIn: 3600000 }).json({ id: user._id, username });
 
   } catch (error) {
     console.error(error);
