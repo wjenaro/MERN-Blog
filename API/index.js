@@ -43,6 +43,7 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use('/static', express.static('public'));
 // Middleware for setting security headers
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -92,11 +93,9 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  
 
   try {
     const user = await User.findOne({ username });
-    
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
@@ -108,27 +107,25 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id },  process.env.JWT_SECRET  );//{ expiresIn: '1h', algorithm: 'HS256' }
-    
+    const token = jwt.sign({ username, id: user._id }, secret);
 
-    // Set secure and HttpOnly flags for cookie
-    res.json(token);
-    //res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === "production", expiresIn: 3600000 }).json({ id: user._id, username });
+    // Set secure and HttpOnly flags for the cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: 'none', // Use 'none' in production for cross-site cookies
+    });
 
+    res.json({ id: user._id, username });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
 });
 
-
-app.get('/', (req, res) => {
-  res.send('Working');
-});
-
-// profile
+// Update the profile route to use the token from the cookie
 app.get('/profile', (req, res) => {
-  const { token } = req.cookies;
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: not found' });
@@ -142,7 +139,7 @@ app.get('/profile', (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true, // Set to true in production
+      secure: process.env.NODE_ENV === "production",
       sameSite: 'none',
     });
 
