@@ -95,7 +95,7 @@ app.post('/login', async (req, res) => {
 
   try {
     const user = await User.findOne({ username });
-    console.log(user);
+    
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
@@ -107,7 +107,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    const token = jwt.sign({ username, id: user._id },  process.env.JWT_SECRET  );//{ expiresIn: '1h', algorithm: 'HS256' }
     
 
     // Set secure and HttpOnly flags for cookie
