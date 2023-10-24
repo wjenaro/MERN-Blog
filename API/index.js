@@ -107,7 +107,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id }, secret);
+    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: expirationTime });
 
     // Set secure and HttpOnly flags for the cookie
     res.cookie('token', token, {
