@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import {  Routes, Route } from "react-router-dom";
 import Login from './LoginPage';
 import Post from './Post';
 import Register from './Register';
-import {UserContextProvider} from './UserContext';
+import { UserContextProvider } from './UserContext';
 import CreatePost from './pages/CreatePost';
 import PostPage from './pages/PostPage';
 import EditPost from './pages/EditPost';
 
+const SERVER_URL = 'https://mern-blog-api-hazel.vercel.app';
 
 /**
  * Renders the main structure of a web page.
@@ -17,11 +18,14 @@ import EditPost from './pages/EditPost';
  */
 function App() {
   const [posts, setPosts] = useState([]);
-  const serverUrl = 'https://mern-blog-hazel.vercel.app';
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${serverUrl}/posts`);
+        const response = await fetch(`${SERVER_URL}/posts`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
         const data = await response.json();
         setPosts(data);
       } catch (error) {
@@ -32,48 +36,26 @@ function App() {
     fetchData();
   }, []);
 
+  const MainContent = () => (
+    <main>
+      <Header />
+      <Post posts={posts} />
+      <Footer />
+    </main>
+  );
+
   return (
     <UserContextProvider>
-      
- <Routes>
-        <Route index element={
-            <main>
-                <Header />
-                <Post posts={posts} /> 
-             
-                <Footer />
-            </main>
-
-        }/>
-        <Route path='/login' element={
-          <Login />
-        }/>
-           <Route path='/register' element={
-            <Register />
-        }/>
-        <Route path='/create' element={
-          <CreatePost />
-
-        }/>
-        <Route path='/post/:id' element={
-          <PostPage />
-
-        }/>
-        <Route path='/edit/:id' element={
-          <EditPost />
-
-        }/>
-     
-
+      <Routes>
+        <Route index element={<MainContent />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/create" element={<CreatePost />} />
+        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/edit/:id" element={<EditPost />} />
       </Routes>
-  
     </UserContextProvider>
-   
-     
-     
- 
   );
 }
 
 export default App;
-

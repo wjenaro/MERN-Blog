@@ -12,8 +12,9 @@ export default function PostPage() {
   const [postInfo,setPostInfo] = useState(null);
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
-  const serverUrl = 'https://mern-blog-hazel.vercel.app';
- 
+  //const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
+ const ImageUrl="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
   const url_ = 'https://mern-blog-client-sigma.vercel.app';
   
 
@@ -64,7 +65,7 @@ export default function PostPage() {
         <Row>
           <Col>
           <img
-              src={`${serverUrl}/${postInfo.imageFile}`}
+              src={`${ImageUrl}/${postInfo.imageFile}`}
               alt='Parakeets on a Branch'
               fluid
               className="img-fluid"  

@@ -1,6 +1,6 @@
 const express = require('express');
-const Post = require("./models/Post");
-const User = require("./models/User");
+const Post = require('./models/Post');
+const User = require('./models/User');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
@@ -12,13 +12,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 4000;
 require('dotenv').config();
 
 // Test database connection
 const dbName = process.env.DB_NAME || 'Animals';
-const uri = `mongodb+srv://animalblog:rti7eWc2hWrVPufP@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const secret = process.env.JWT_SECRET || '70a9d0  f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
+const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -33,13 +34,14 @@ db.on('error', (error) => {
   console.error('MongoDB connection error:', error);
 });
 
-const CLIENT = process.env.CLIENT || "https://mern-blog-client-sigma.vercel.app";
+const CLIENT = process.env.CLIENT;
 app.use(cors({
   origin: CLIENT,
-  methods: ["POST", "GET", "PUT"],
+  methods: ['POST', 'GET', 'PUT'],
   credentials: true,
 }));
 
+app.use('/static', express.static('public'));
 // Middleware for setting security headers
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -51,12 +53,8 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(cookieParser());
 
-
-
-
-
- //fetch data to populate the homepage  
- app.get('/posts', async (req, res) => {
+// fetch data to populate the homepage
+app.get('/posts', async (req, res) => {
   try {
     const posts = await Post.find()
       .populate('author', 'username')
@@ -68,8 +66,8 @@ app.use(cookieParser());
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-//register
 
+// register
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -107,22 +105,25 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: '1h', algorithm: 'HS256' });
+    const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: expirationTime });
 
-    res.cookie('token', token).json({ id: user._id, username });
+    // Set secure and HttpOnly flags for the cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: 'none', // Use 'none' in production for cross-site cookies
+    });
 
-    
+    res.json({ id: user._id, username });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred while processing the login' });
   }
-
-
-  
 });
-//profile 
+
+// Update the profile route to use the token from the cookie
 app.get('/profile', (req, res) => {
-  const { token } = req.cookies;
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: not found' });
@@ -136,21 +137,22 @@ app.get('/profile', (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: true, // Set to true in production
+      secure: process.env.NODE_ENV === "production",
       sameSite: 'none',
     });
 
     res.json(decoded);
   });
 });
-
+app.post('/logout', (req, res) => {
+  res.clearCookie('token').json('ok');
+});
 
 
 const uploadMiddleware = multer({ dest: '/tmp/' });
 
-app.post('/logout', (req, res) => {
-  res.clearCookie('token').json('ok');
-});
+
+
 app.post('/cpost', uploadMiddleware.single('imageFile'), async (req, res) => {
   try {
     if (!req.file) {
@@ -192,23 +194,15 @@ app.post('/cpost', uploadMiddleware.single('imageFile'), async (req, res) => {
   }
 });
 
-app.get('/posts', async (req, res) => {
+app.get('/post/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const posts = await Post.find()
-      .populate('author', 'username')
-      .sort({ createdAt: -1 })
-      .limit(5);
-    res.json(posts);
+    const postDoc = await Post.findById(id).populate('author', ['username']);
+    res.json(postDoc);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});
-
-app.get('/post/:id', async (req, res) => {
-  const { id } = req.params;
-  const postDoc = await Post.findById(id).populate('author', ['username']);
-  res.json(postDoc);
 });
 
 app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
@@ -275,7 +269,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

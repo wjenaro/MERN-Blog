@@ -13,8 +13,8 @@ import { Link } from 'react-router-dom';
  * @returns {JSX.Element} - Rendered JSX code representing a container with rows and columns for each post.
  */
 function ContainerExample({ posts }) {
-  const serverUrl = 'https://mern-blog-97ybn8snm-jenaros-projects.vercel.app';
-
+  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
+const IMAGEGIT="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
   /**
    * Truncates the content if it exceeds the maximum length.
    *
@@ -38,7 +38,7 @@ function ContainerExample({ posts }) {
             <Col xs lg="3">
               <Link to={`/post/${post._id}`}>
               <img
-                src={`${serverUrl}/${post.imageFile}`}
+                src={`${IMAGEGIT}/${post.imageFile}`}
                 className='post-image'
                 alt='Good picture'
                 style={{
