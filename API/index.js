@@ -17,11 +17,11 @@ const PORT = process.env.PORT || 4000;
 require('dotenv').config();
 
 // Test database connection
-const dbName = process.env.DB_NAME || 'Animals';
-const USERNAME = process.env.DB_USERNAME || 'animalblog';
-const PASSWORD = process.env.DB_PASSWORD || 'qYgip4zqvhp4rbUG';
+const dbName = process.env.DB_NAME;
+const USERNAME = process.env.DB_USERNAME;
+const PASSWORD = process.env.DB_PASSWORD;
 const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
+const secret = process.env.JWT_SECRET;
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -36,7 +36,7 @@ db.on('error', (error) => {
   console.error('MongoDB connection error:', error);
 });
 
-const CLIENT = process.env.CLIENT || 'https://mern-blog-client-sigma.vercel.app';
+const CLIENT = process.env.CLIENT;
 app.use(cors({
   origin: CLIENT,
   methods: ['POST', 'GET', 'PUT'],
@@ -146,12 +146,14 @@ app.get('/profile', (req, res) => {
     res.json(decoded);
   });
 });
-
-const uploadMiddleware = multer({ dest: '/tmp/' });
-
 app.post('/logout', (req, res) => {
   res.clearCookie('token').json('ok');
 });
+
+
+const uploadMiddleware = multer({ dest: '/tmp/' });
+
+
 
 app.post('/cpost', uploadMiddleware.single('imageFile'), async (req, res) => {
   try {
