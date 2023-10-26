@@ -24,12 +24,18 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Test database connection
+<<<<<<< HEAD
 const dbName = process.env.DB_NAME;
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
 const uri = 'mongodb://0.0.0.0:27017/Cats';
 
 const secret = process.env.JWT_SECRET;
+=======
+const dbName = process.env.DB_NAME || 'Animals';
+const uri = `mongodb+srv://animalblog:llTPgDKaGX6rjqiv@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const secret = process.env.JWT_SECRET || '70a9d0f3ef7205e387e46f7e1a5d83a87f385a0dc2d6d3b3a64256a4f0b0e9d';
+>>>>>>> 9e502fecb3eda947b3b0c3a6378adb4954e52be0
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
