@@ -13,8 +13,8 @@ import { Link } from 'react-router-dom';
  * @returns {JSX.Element} - Rendered JSX code representing a container with rows and columns for each post.
  */
 function ContainerExample({ posts }) {
-  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
-const IMAGEGIT="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
+  const IMAGE_BASE_URL = "http://localhost:4000"; // Update this to match your API server's image endpoint
+
   /**
    * Truncates the content if it exceeds the maximum length.
    *
@@ -37,30 +37,33 @@ const IMAGEGIT="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
           <Row key={post._id}>
             <Col xs lg="3">
               <Link to={`/post/${post._id}`}>
-              <img
-                src={`${IMAGEGIT}/${post.imageFile}`}
-                className='post-image'
-                alt='Good picture'
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                }}
-              />
+                <img
+                  src={`${IMAGE_BASE_URL}/${post.imageFile}`} // Combine the base URL with imageFile
+                  className='post-image'
+                  alt='Good picture'
+                  style={{
+                    maxWidth: '100%',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  }}
+                />
               </Link>
             </Col>
             <Col>
-             <Link to={`/post/${post._id}`}>
-             <h1 className='text-primary font-weight-bold'>{post.title}</h1>
-             </Link>
-              <span className='font-weight-bold text-uppercase pr-4'><a className='text-decoration-none' href=''>{post.author.username}</a></span> <span> | </span>
+              <Link to={`/post/${post._id}`}>
+                <h1 className='text-primary font-weight-bold'>{post.title}</h1>
+              </Link>
+              <span className='font-weight-bold text-uppercase pr-4'>
+                <a className='text-decoration-none' href=''>{post.author.username}</a>
+              </span>
+              <span> | </span>
               <time>{format(new Date(formattedDate), 'MM d /yyyy')}</time>
-              <div dangerouslySetInnerHTML={{ __html: truncateContent(post.content, 500) }} /> 
+              <div dangerouslySetInnerHTML={{ __html: truncateContent(post.content, 500) }} />
               <Link to={`/post/${post._id}`}>
                 <span>Read More...</span>
               </Link>
-              <hr/>
+              <hr />
             </Col>
           </Row>
         );

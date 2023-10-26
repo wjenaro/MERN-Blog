@@ -13,9 +13,9 @@ export default function PostPage() {
   const {userInfo} = useContext(UserContext);
   const {id} = useParams();
   //const serverUrl = 'https://mern-blog-hazel.vercel.app';
-  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
- const ImageUrl="https://raw.githubusercontent.com/wjenaro/MERN-Blog/main/API";
-  const url_ = 'https://mern-blog-client-sigma.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'http://localhost:4000';
+ const ImageUrl="http://localhost:4000";
+  const url_ = 'http://localhost:3000';
   
 
   useEffect(() => {

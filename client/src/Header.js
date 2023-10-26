@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
+
 /**
  * Renders a Bootstrap Navbar component with a brand link, toggle button, and login/registration buttons.
  * @returns {JSX.Element} The rendered Navbar component.
@@ -11,7 +12,8 @@ import { UserContext } from './UserContext';
 function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext); // Use useContext instead of UserContext
   //const serverUrl = 'https://mern-blog-hazel.vercel.app';
-  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'http://localhost:4000';
+  const url_ = 'http://localhost:3000';
 
   useEffect(() => {
     async function fetchData() {
@@ -43,7 +45,7 @@ function Header() {
   return (
     <Navbar bg="light">
       <Container>
-        <Navbar.Brand href="/">Blog</Navbar.Brand>
+        <Navbar.Brand href="/"><img src={`${url_}/logo.png`} alt='Cat Chronicles Blog'></img></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text className="p-3">

@@ -9,7 +9,7 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'http://localhost:4000';
   //const serverUrl = 'https://mern-blog-hazel.vercel.app';
   /**
    * Handles form submission.

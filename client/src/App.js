@@ -10,7 +10,7 @@ import CreatePost from './pages/CreatePost';
 import PostPage from './pages/PostPage';
 import EditPost from './pages/EditPost';
 
-const SERVER_URL = 'https://mern-blog-api-hazel.vercel.app';
+const SERVER_URL = 'http://localhost:4000';
 
 /**
  * Renders the main structure of a web page.

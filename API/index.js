@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const Post = require('./models/Post');
 const User = require('./models/User');
@@ -11,16 +12,23 @@ const path = require('path');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 4000;
-require('dotenv').config();
+const PORT = process.env.PORT;
+// Middleware for serving static files from the /uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/static', express.static('public'));
+
+// Your other route handlers...
+
 
 // Test database connection
 const dbName = process.env.DB_NAME;
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
-const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.hv9kwab.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const uri = 'mongodb://0.0.0.0:27017/Cats';
+
 const secret = process.env.JWT_SECRET;
 
 mongoose.connect(uri, {
@@ -36,14 +44,14 @@ db.on('error', (error) => {
   console.error('MongoDB connection error:', error);
 });
 
-const CLIENT = process.env.CLIENT;
+const CLIENT = process.env.CLIENT_;
 app.use(cors({
   origin: CLIENT,
   methods: ['POST', 'GET', 'PUT'],
   credentials: true,
 }));
 
-app.use('/static', express.static('public'));
+
 // Middleware for setting security headers
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
@@ -107,13 +115,15 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Password is incorrect' });
     }
 
+    const expirationTime = '1h';
+
     const token = jwt.sign({ username, id: user._id }, secret, { expiresIn: expirationTime });
 
     // Set secure and HttpOnly flags for the cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: 'none', // Use 'none' in production for cross-site cookies
+      secure: false,
+      
     });
 
     res.json({ id: user._id, username });
@@ -151,9 +161,8 @@ app.post('/logout', (req, res) => {
 });
 
 
-const uploadMiddleware = multer({ dest: '/tmp/' });
 
-
+const uploadMiddleware = multer({ dest: 'uploads' });
 
 app.post('/cpost', uploadMiddleware.single('imageFile'), async (req, res) => {
   try {
@@ -207,7 +216,7 @@ app.get('/post/:id', async (req, res) => {
   }
 });
 
-app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
+app.put('/post/:id', uploadMiddleware.single('file'), async (req, res) => {
   try {
     let newPath = null;
 

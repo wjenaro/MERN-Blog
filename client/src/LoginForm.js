@@ -15,7 +15,7 @@ function BasicLogin() {
   const [redirect, setRedirect]=useState(false);
   
   //const serverUrl = 'https://mern-blog-hazel.vercel.app';
-  const serverUrl = process.env.SERVER_URL || 'https://mern-blog-api-hazel.vercel.app';
+  const serverUrl = process.env.SERVER_URL || 'http://localhost:4000';
 
   /**
    * Handles the form submission and sends a POST request to the login endpoint.
@@ -51,7 +51,7 @@ if(redirect){
       <Row>
         <Col>
           <div>
-            <img src="#" alt="Placeholder for your image" />
+            
           </div>
         </Col>
         <Col>
