@@ -23,11 +23,16 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Your other route handlers...
 
 
-// Test database connection
+
 const dbName = process.env.DB_NAME;
-const USERNAME = process.env.DB_USERNAME;
-const PASSWORD = process.env.DB_PASSWORD;
-const uri = 'mongodb://0.0.0.0:27017/Cats';
+const USERNAME = process.env.MONGO_USERNAME;
+const PASSWORD = process.env.MONGO_PASS;
+
+
+
+const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.ceri8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+//const uri = 'mongodb://0.0.0.0:27017/Cats';
 
 const secret = process.env.JWT_SECRET;
 
