@@ -28,17 +28,14 @@ const dbName = process.env.DB_NAME;
 const USERNAME = process.env.MONGO_USERNAME;
 const PASSWORD = process.env.MONGO_PASS;
 
+const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.ceri8.mongodb.net/${dbName}?retryWrites=true&w=majority&appName=Cluster0`;
 
-
-const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.ceri8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 //const uri = 'mongodb://0.0.0.0:27017/Cats';
 
 const secret = process.env.JWT_SECRET;
 
 mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 });
 
 const db = mongoose.connection;
@@ -49,9 +46,10 @@ db.on('error', (error) => {
   console.error('MongoDB connection error:', error);
 });
 
-const CLIENT = process.env.CLIENT_;
+const CLIENT = process.env.CLIENT_PORT;
+// console.log(CLIENT);
 app.use(cors({
-  origin: CLIENT,
+  origin: 'http://localhost:3000',
   methods: ['POST', 'GET', 'PUT'],
   credentials: true,
 }));
