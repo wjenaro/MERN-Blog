@@ -39,7 +39,7 @@ const USERNAME = process.env.MONGO_USERNAME;
 const PASSWORD = process.env.MONGO_PASS;
 const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.ceri8.mongodb.net/${dbName}?retryWrites=true&w=majority&appName=Cluster0`;
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(uri, {  });
 
 const db = mongoose.connection;
 db.once('open', () => {
