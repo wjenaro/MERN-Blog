@@ -23,7 +23,7 @@ export default function EditPost() {
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await fetch(`${serverUrl}/post/${id}`);
+        const response = await fetch(`${serverUrl}/posts/${id}`);
         console.log('Response:', response); // Log the response
         const postInfo = await response.json();
         setTitle(postInfo.title);
@@ -49,7 +49,7 @@ export default function EditPost() {
     }
 
     try {
-      const response = await fetch(`${serverUrl}/post/${id}`, {
+      const response = await fetch(`${serverUrl}/posts/${id}`, {
         method: 'PUT',
         body: data,
         credentials: 'include',
@@ -64,7 +64,7 @@ export default function EditPost() {
   };
 
   if (redirect) {
-    return <Navigate to={`/post/${id}`} />;
+    return <Navigate to={`/`} />;
   }
 
   const modules = {

@@ -19,7 +19,7 @@ export default function PostPage() {
   
 
   useEffect(() => {
-    fetch(`${serverUrl}/post/${id}`)
+    fetch(`${serverUrl}/posts/${id}`)
       .then(response => {
         response.json().then(postInfo => {
           setPostInfo(postInfo);

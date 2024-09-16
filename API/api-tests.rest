@@ -1,0 +1,56 @@
+### Get All Posts
+GET http://localhost:4000/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbmFybyIsImlkIjoiNjZlNmM4OWY1MzBhNTRiMTQ2N2RjYTEwIiwiaWF0IjoxNzI2NDYyMjI2LCJleHAiOjE3MjY0NjU4MjZ9.Vw9jWFcZfx-iI-RTpSEowkaIU9rwBlpqkRA5k8td3Aw
+
+### Get Post By ID
+GET http://localhost:4000/posts/{postId}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbmFybyIsImlkIjoiNjZlNmM4OWY1MzBhNTRiMTQ2N2RjYTEwIiwiaWF0IjoxNzI2NDYyMjI2LCJleHAiOjE3MjY0NjU4MjZ9.Vw9jWFcZfx-iI-RTpSEowkaIU9rwBlpqkRA5k8td3Aw
+
+### Create New Post
+POST http://localhost:4000/posts/
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplbmFybyIsImlkIjoiNjZlNmM4OWY1MzBhNTRiMTQ2N2RjYTEwIiwiaWF0IjoxNzI2NDYyMjI2LCJleHAiOjE3MjY0NjU4MjZ9.Vw9jWFcZfx-iI-RTpSEowkaIU9rwBlpqkRA5k8td3Aw
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="title"
+
+Test Post Title
+--boundary
+Content-Disposition: form-data; name="content"
+
+This is the content of the test post.
+--boundary
+Content-Disposition: form-data; name="imageFile"; filename="test-image.jpg"
+Content-Type: image/jpeg
+
+<insert-image-file-content-here>
+--boundary--
+
+
+
+
+
+
+### Update Post
+PUT http://localhost:4000/posts/{postId}
+Authorization: Bearer <insert-auth-token-here>
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="id"
+
+{postId}
+--boundary
+Content-Disposition: form-data; name="title"
+
+Updated Post Title
+--boundary
+Content-Disposition: form-data; name="content"
+
+This is the updated content of the post.
+--boundary
+Content-Disposition: form-data; name="imageFile"; filename="updated-image.jpg"
+Content-Type: image/jpeg
+
+<insert-image-file-content-here>
+--boundary--

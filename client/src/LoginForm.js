@@ -1,9 +1,8 @@
 import React, { useState } from 'react'; // Import React
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {Navigate} from 'react-router-dom'
-
+import { Navigate } from 'react-router-dom';
 
 /**
  * Renders a login form component.
@@ -12,9 +11,10 @@ import {Navigate} from 'react-router-dom'
 function BasicLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [redirect, setRedirect]=useState(false);
-  
-  //const serverUrl = 'https://mern-blog-hazel.vercel.app';
+  const [redirect, setRedirect] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const serverUrl = process.env.SERVER_URL || 'http://localhost:4000';
 
   /**
@@ -23,8 +23,10 @@ function BasicLogin() {
    */
   async function login(ev) {
     ev.preventDefault();
+    setSuccessMessage(''); // Clear previous messages
+    setErrorMessage('');
     try {
-      const response = await fetch(`${serverUrl}/login`, {
+      const response = await fetch(`${serverUrl}/auth/login`, {
         method: 'POST',
         body: JSON.stringify({ username, password }),
         headers: { 'Content-Type': 'application/json' },
@@ -33,29 +35,43 @@ function BasicLogin() {
 
       if (response.ok) {
         // Handle successful login
+  
         setRedirect(true);
       } else {
         // Handle login error
-        alert("Login Failed")
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Login failed.');
       }
     } catch (error) {
       // Handle network error
-      
+      setErrorMessage('An error occurred during login.');
     }
   }
-if(redirect){
-  return <Navigate to={'/'} />
-}
+
+  if (redirect) {
+    return <Navigate to={'/'} />;
+  }
+
   return (
     <Container>
       <Row>
         <Col>
           <div>
-            
+            {/* You can add additional content here if needed */}
           </div>
         </Col>
         <Col>
           <Form onSubmit={login}>
+            {successMessage && (
+              <Alert variant="success">
+                {successMessage}
+              </Alert>
+            )}
+            {errorMessage && (
+              <Alert variant="danger">
+                {errorMessage}
+              </Alert>
+            )}
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -87,5 +103,3 @@ if(redirect){
 }
 
 export default BasicLogin;
-
-

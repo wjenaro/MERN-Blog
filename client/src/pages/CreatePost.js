@@ -58,7 +58,7 @@ export default function CreatePost() {
     event.preventDefault();
 
     try {
-        const response= await fetch(`${serverUrl}/cpost`,
+        const response= await fetch(`${serverUrl}/posts`,
         {
             method: "POST", 
             body: formData,
